@@ -1,209 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as d3 from 'd3';
-import fs from 'fs';
-import * as tf from '@tensorflow/tfjs';
 import irisData from './irisList.js';
-import Flower from './flower.js'
-import FlowerInputs from './flower_slider_inputs.js'
 
-import './index.css';
-
-
-class IrisViewer extends React.Component {
-  constructor(props) {
-	  super(props);
-	  // fs.readFile('./iris.data', (fileData) => {
-		  // console.log(fileData)
-	  // });
-	  this.state = { 
-	  'model' : tf.sequential(), 
-	  'data': irisData,
-	  'flowerNum': 0
-	  };
-	}
-	
-  componentDidMount() {
-	  //this.viewData();
-	  this.setState({ 'flowerNum': this.state.flowerNum++ });
-	  //console.log(this.state);
-	  //const csvDataset = tf.data.csv('file://./iris.data');
-	  //this.setState({'cData': csvDataset});
-  }
- 
-	
-  /* 
-    getTensorFlow() {
-	let tfB = tf.getBackend();
-	//let d3T = d3;
-	console.log(this.state);
-	}
-  async getData() {
-	  //const carsDataReq = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
-	  //const irisTestData = await fetch('http://localhost:8080');	  
-	  //const carsData = await carsDataReq.json();
-	  //const irisData = await carsDataReq.json();  	  
-	  // const cleaned = carsData.map(car => ({
-		// mpg: car.Miles_per_Gallon,
-		// horsepower: car.Horsepower,
-	  // }))
-	  // .filter(car => (car.mpg != null && car.horsepower != null));
-	  
-	  // return cleaned;
-	  console.log('iris test', irisData);
-	  console.log('first flower', irisData.irisData[1]);
-	  
-	  return irisData;
-	}
-  async viewData() {
-	  const data = await this.getData();
-	  this.setState({'data': data});
-  } */
-  render() {
-	//this.getTensorFlow();
-	let flowerData = this.state.data.irisData;
-	//console.log('fdata', flowerData);
-	// flowerData.forEach(
-		// (f, index) => {
-			// console.log('flower ', f);
-			// console.log('flower index', index);
-		// })
-    return (
-      <div className="iris" id="iris_board">
-        {/* TODO */}
-		<p>iris flower stat board</p>
-		
-		{flowerData.map((flower, index) => {
-			//return (<p>flower + {index}</p>)
-			//console.log('flower ', flower);
-			//console.log('flower index', index);
-			return <Flower fNum={index} flowerStuff={flower} key={"flower_id" + index} />;
-		})}
-      </div>
-    );
-  }
-}
-
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {/* TODO */}
-      </button>
-    );
-  }
-}
-class Board extends React.Component {
-  renderSquare(i) {
-    return <Square />;
-  }
-
-  render() {
-    const status = 'Next player: X';
-
-    return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
-  }
-}
-/*
-		<div className="game-board">
-          <Board />
-        </div>
-*/
-class Game extends React.Component {
-	
-	constructor(props) {
-	  super(props);
-	  this.state = { 
-	  'inputs' : {
-		  'petal_length': '',
-			'petal_width': '',
-			'sepal_length': '',
-			'sepal_width': '',
-			'species': 'user_input'
-		}
-	  };
-	  this.inputHandler = this.inputHandler.bind(this);
-	}
-	
-	inputHandler(stuff) {
-		console.log('stuff ', stuff);
-		let setStateFlag = false;
-		let diffCount = 0;
-		// loop over inputs, if there is a difference between user 
-		// input and previously saved state, set flag to true and update state
-		// this is broken way to use componentDidMount from child component FlowerInputs i think
-		// in essence checking for difference in 'prevProps' at source should be clearer
-		for(let inputKey in this.state.inputs){
-			
-			//setStateFlag = false;
-			if(this.state.inputs[inputKey] !== stuff[inputKey]){
-				setStateFlag = true;
-				diffCount++;
-			}
-		}
-		console.log('stuff flag', setStateFlag);
-		console.log('diffCount', diffCount);
-		//this.setState({'inputs': stuff});
-		if(setStateFlag){
-			this.setState({'inputs': stuff});
-		}
-	}
-	
-  render() {
-	let inputKeys = Object.keys(this.state.inputs);
-    return (
-      <div className="game">
-		<IrisViewer />
-        
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <div>		  
-			  <FlowerInputs
-				inputHandler={this.inputHandler}
-				inputStuff={this.state.inputs}
-			  />
-			  {
-				inputKeys.map(iKey => {
-					  return(
-						<div><p>{iKey}:{this.state.inputs[iKey]}</p></div>
-					)})				  
-				}
-			<Flower fNum={169} flowerStuff={this.state.inputs} key={"flower_id_169"} />
-		  </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-// ========================================
-
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
-
-// or have it here
-class FlowerInputsTwo extends React.Component {
+class FlowerInputs extends React.Component {
 	
 	constructor(props) {
 	  super(props);
@@ -280,8 +79,25 @@ class FlowerInputsTwo extends React.Component {
 		this.state['sepal_width_input'] = 'none';
 	  
 	}
-	componentDidMount() {
+	componentDidUpdate(prevProps) {
 		
+		let inputObj = {
+			'petal_length':this.state.petal_length_input === 'none' ? '1' : this.state.petal_length_input,
+			'petal_width': this.state.petal_width_input === 'none' ? '1' : this.state.petal_width_input,
+			'sepal_length': this.state.sepal_length_input === 'none' ? '1' : this.state.sepal_length_input,
+			'sepal_width': this.state.sepal_width_input === 'none' ? '1' : this.state.sepal_width_input,
+			'species': 'user_input'
+		};
+		window.console.log('prevProps ', prevProps);
+		let setStateFlag = false;
+		for(let inputKey in prevProps.inputStuff){
+			
+			//setStateFlag = false;
+			if(prevProps.inputStuff[inputKey] !== inputObj[inputKey]){
+				setStateFlag = true;
+			}
+		}
+		setStateFlag && this.props.inputHandler(inputObj);	
 	}
 	
 	petalSliderHandler(e) {
@@ -316,7 +132,7 @@ class FlowerInputsTwo extends React.Component {
 	  window.console.log("sliderAvgl: ", widAvg);
 	  return (
 		<div>
-				<h1>flower slider stuff</h1>
+			<h1>flower slider stuff</h1>
 			<div>
 				<input 
 					type="range" 
@@ -366,11 +182,13 @@ class FlowerInputsTwo extends React.Component {
 				<label htmlFor="flowerSlider_2">flowerSepalSlider_width</label>
 			</div>
 			
-			<h3>petal length {this.state.petal_length_input}</h3>
-			<h3>petal width {this.state.petal_width_input}</h3>
-			<h3>sepal length {this.state.sepal_length_input}</h3>
-			<h3>sepal width {this.state.sepal_width_input}</h3>
+	
 		</div>
 	  )
   }
 }
+		/*{<h3>petal length {this.state.petal_length_input}</h3>
+			<h3>petal width {this.state.petal_width_input}</h3>
+			<h3>sepal length {this.state.sepal_length_input}</h3>
+			<h3>sepal width {this.state.sepal_width_input}</h3>}*/
+export default FlowerInputs;
