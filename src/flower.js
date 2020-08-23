@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
+import * as tfvis from '@tensorflow/tfjs-vis';
 
 class Flower extends React.Component {
 	
@@ -14,11 +15,11 @@ class Flower extends React.Component {
 	* https://www.d3indepth.com/shapes/
 	*/
   componentDidMount(){
-	  
-		console.log('making flower ', this.state.fNum);
+		
+		//console.log('making flower ', this.state.fNum);
 		const flower = d3.select("#d3_flower_"+this.props.fNum);
 		//console.log("flower state", this.state);
-
+		//console.log("tfvis" , tfvis);
 		let lineGenerator = d3.line().curve(d3.curveCardinal);
 		let width = 300;
 		let height = 300;
@@ -36,8 +37,9 @@ class Flower extends React.Component {
 		// make flower part
 		let radialLineGenerator = d3.radialLine();
 		let oneFlower = this.state.flowerData;
-		//console.log("one flower ", oneFlower);
-		//console.log('flower ', oneFlower);
+		//let values =  [{x: oneFlower.petal_length, y: oneFlower.petal_width}];
+		//const values = [{x: 2,y: 4}, {x: 4,y: 6}];
+		//console.log('fValues', values);
 		// adding text to svg
 		/*flowerSvg
 			.append("text")
@@ -46,11 +48,7 @@ class Flower extends React.Component {
 			.attr("font-size", "12px")
 			.attr("x", "0")
 			.attr("y", "0")
-			.attr("dy", "0");
-			// .append("tspan")
-			// .text("text1")
-			// .attr("x", "0")
-			// .attr("dy", "15")
+			.attr("dy", "0")
 			// .append("tspan")
 			// .text("text2")
 			// .attr("x", "0")
@@ -157,15 +155,17 @@ class Flower extends React.Component {
 	  }
   componentDidUpdate(prevProps){
 	  //console.log('making new flower ', this.props);
+	  // using specific div id of 169 to manually select user input flower
 	  if(this.props.fNum === 169){
-		  this.makeFlower();
+		  this.updateFlower();
 	  }
 	  
   }
   
-  makeFlower(){
+  updateFlower(){
 	  //d3.selectAll("svg > *").remove();
 	  const flower = d3.select("#d3_flower_169");
+
 	  flower.selectAll("*").remove();
 		//console.log("flower state", this.state);
 
@@ -185,8 +185,28 @@ class Flower extends React.Component {
 		
 		// make flower part
 		let radialLineGenerator = d3.radialLine();
+	
+
 		//let oneFlower = this.state.flowerData;
 		let oneFlower = this.props.flowerStuff;
+
+
+		// adding text to svg
+		flowerSvg
+			.append("text")
+			.attr("id", "flowerText_"+this.props.fNum)
+			.attr("transform", "translate(0, 110)")
+			.attr("font-size", "12px")
+			.attr("x", "0")
+			.attr("y", "0")
+			.attr("dy", "0");
+		Object.entries(oneFlower).forEach((items, index) => {
+			let flowerTextStuff = d3.select("#flowerText_"+this.props.fNum);
+			flowerTextStuff.append("tspan")
+			.text(items[0] + ":" + items[1])
+			.attr("x", "0")
+			.attr("dy", "15");
+		})
 		let petalWidth = parseFloat(oneFlower.petal_width);
 		let petalLength = parseFloat(oneFlower.petal_length);
 		let sepallWidth = parseFloat(oneFlower.sepal_width);
@@ -264,7 +284,7 @@ class Flower extends React.Component {
 	  flowerData = this.props.flowerStuff;
 	  let flowerKeys = Object.keys(flowerData);
 
-	  flowerKeys.map(key => {console.log('fkey', key)});
+	  //flowerKeys.map(key => {console.log('fkey', key)});
 	  return (
 		  <table style={{"border":"2px solid #333"}}>
 			  <thead>
