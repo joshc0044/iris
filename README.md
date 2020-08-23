@@ -4,9 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-## First thing you have to do
-
-### `npm install`
+### First thing you have to do is `npm install` or it wont work
 
 Installs all the stuff (checkout out package.json for which libraries)<br />
 App won't work before installing needed npm libraries
