@@ -7,12 +7,11 @@ import Flower from './flower.js';
 class IrisViewer extends React.Component {
   constructor(props) {
 	  super(props);
-	  // fs.readFile('./iris.data', (fileData) => {
-		  // console.log(fileData)
-	  // });
+
 	  
 	 const model = tf.sequential();
-	    // Add a single input layer
+	 // https://codelabs.developers.google.com/codelabs/tfjs-training-regression/index.html#4
+	 // Add a single input layer
 	 model.add(tf.layers.dense({inputShape: [1], units: 1, useBias: true}));
 	  
 	  // Add an output layer
